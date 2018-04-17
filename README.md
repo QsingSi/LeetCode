@@ -1,0 +1,1 @@
+LeetCode solutions, maybe trival
