@@ -67,34 +67,38 @@ import java.util.Set;
  */
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        Queue<String> q  = new LinkedList<>();
-        q.add(beginWord);
-        q.add(null);
+        if (!wordList.contains(endWord))
+            return 0;
+        Queue<String> q = new LinkedList<>();
         Set<String> visit = new HashSet<>();
+        Queue<Integer> dis = new LinkedList<>();
+        q.add(beginWord);
         visit.add(beginWord);
-        int level = 1;
+        dis.add(1);
         while (!q.isEmpty()) {
             String tmp = q.poll();
-            if (tmp != null) {
-                for (int i = 0; i < tmp.length(); i++) {
-                    char[] arr = tmp.toCharArray();
-                    for (char c = 'a'; c <= 'z'; c++) {
-                        arr[i] = c;
-                        String word = new String(arr);
-                        if (word.equals(endWord))
-                            return level + 1;
-                        if (wordList.contains(word) && !visit.contains(word)) {
-                            q.add(word);
-                            visit.add(word);
-                        }
-                    }
+            int d = dis.poll();
+            if (tmp.equals(endWord))
+                return d;
+            for (int i = 0; i < wordList.size(); i++) {
+                if (judge(tmp, wordList.get(i)) && !visit.contains(wordList.get(i))) {
+                    q.add(wordList.get(i));
+                    visit.add(wordList.get(i));
+                    dis.add(d + 1);
                 }
-            } else {
-                level++;
-                if (!q.isEmpty())
-                    q.add(null);
             }
         }
         return 0;
+    }
+    private boolean judge(String s1, String s2) {
+        int res = 0;
+        for (int i = 0; i < s1.length(); i++) {
+            if (s1.charAt(i) != s2.charAt(i)) {
+                res++;
+                if (res > 1)
+                    return false;
+            }
+        }
+        return res == 1;
     }
 }
