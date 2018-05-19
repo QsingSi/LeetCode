@@ -37,11 +37,11 @@
 class Solution {
     public int hammingDistance(int x, int y) {
         int tmp = x ^ y;
-        String bits = Integer.toBinaryString(tmp);
         int cnt = 0;
-        for (char c : bits.toCharArray())
-            if (c == '1')
-                cnt++;
+        while (tmp > 0) {
+            cnt += (tmp & 1);
+            tmp = tmp >> 1;
+        }
         return cnt;
     }
 }
