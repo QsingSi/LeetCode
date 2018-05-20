@@ -58,30 +58,23 @@
  * }
  */
 class Solution {
-    public int rob(TreeNode root) {
-        if (root == null)
+    private int dfs(TreeNode rt, Map<TreeNode, Integer> mask) {
+        if (rt == null)
             return 0;
-        int odd = 0, even = 0;
-        Queue<TreeNode> q = new LinkedList();
-        Map<TreeNode, Integer> mask = new HashMap();
-        mask.put(root, 0);
-        q.add(root);
-        while (!q.isEmpty()) {
-            TreeNode top = q.remove();
-            int height = mask.get(top);
-            if (height % 2 == 0)
-                even += top.val;
-            else
-                odd += top.val;
-            if (top.left != null) {
-                mask.put(top.left, height + 1);
-                q.add(top.left);
-            }
-            if (top.right != null) {
-                mask.put(top.right, height + 1);
-                q.add(top.right);
-            }
+        if (mask.containsKey(rt))
+            return mask.get(rt);
+        int val = 0;
+        if (rt.left != null) {
+            val += dfs(rt.left.left, mask) + dfs(rt.left.right, mask);
         }
-        return Math.max(odd, even);
+        if (rt.right != null) {
+            val += dfs(rt.right.left, mask) + dfs(rt.right.right, mask);
+        }
+        val = Math.max(val + rt.val, dfs(rt.left, mask) + dfs(rt.right, mask));
+        mask.put(rt, val);
+        return val;
+    }
+    public int rob(TreeNode root) {
+        return dfs(root, new HashMap());
     }
 }
