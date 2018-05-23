@@ -1,3 +1,6 @@
+import java.util.Iterator;
+import java.util.Map;
+
 /*
  * [837] Most Common Word
  *
@@ -56,5 +59,46 @@
 class Solution {
     public String mostCommonWord(String paragraph, String[] banned) {
         List<String> ban  = Arrays.asList(banned);
+        Map<String, Integer> mask = new HashMap<>();
+        paragraph = paragraph.toLowerCase();
+        List<String> words = new ArrayList<>();
+        for (int i = 0; i < paragraph.length();) {
+            if (paragraph.charAt(i) == ' ') {
+                i++;
+                continue;
+            }
+            int j = i + 1;
+            for (; j <= paragraph.length(); j++) {
+                if (j == paragraph.length())
+                    break;
+                if (paragraph.charAt(j) > 'z' || paragraph.charAt(j) < 'a') {
+                    words.add(paragraph.substring(i, j));
+                    break;
+                }
+            }
+            if (j == paragraph.length() && (paragraph.charAt(j - 1) >= 'a' && paragraph.charAt(j - 1) <= 'z')) {
+                words.add(paragraph.substring(i, j));
+            }
+            i = j + 1;
+        }
+        for (String w : words) {
+            if (ban.contains(w))
+                continue;
+            mask.put(w, mask.getOrDefault(w, 0) + 1);
+        }
+        String res = "aaa";
+        int max = -1;
+        mask.put(res, max);
+        Iterator iter = mask.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String key = (String) entry.getKey();
+            Integer val = (Integer) entry.getValue();
+            if (val > max) {
+                res = key;
+                max = val;
+            }
+        }
+        return res;
     }
 }
