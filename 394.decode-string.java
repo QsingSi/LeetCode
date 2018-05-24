@@ -36,27 +36,36 @@
  */
 class Solution {
     public String decodeString(String s) {
-        Stack<Character> st = new Stack<>();
+        Stack<String> st = new Stack<>();
         StringBuilder res = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
+        Stack<Integer> nums = new Stack<>();
+        for (int i = 0; i < s.length();) {
             if (s.charAt(i) == ']') {
                 StringBuilder sb  = new StringBuilder();
-                while (!st.empty() && st.peek() != '[') {
+                while (!st.empty() && !st.peek().equals("[")) {
                     sb.insert(0, st.pop());
                 }
                 st.pop();
-                int cnt = st.pop() - '0';
+                int cnt = nums.pop();
                 String tmp = sb.toString();
                 while (--cnt > 0)
                     sb.append(tmp);
-                //res.insert(0, sb.toString());
-                if (!st.empty() && st.peek() >= 'a' && st.peek() <= 'z')
-                    sb.insert(0, st.pop());
-                res.append(sb.toString());
+                st.push(sb.toString());
+                i++;
+            } else  if (s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+                int j = i + 1;
+                for (; j < s.length(); j++)
+                    if (s.charAt(j) == '[')
+                        break;
+                nums.push(Integer.valueOf(s.substring(i, j)));
+                i = j;
             } else {
-                st.push(s.charAt(i));
+                st.push(s.substring(i, i + 1));
+                ++i;
             }
         }
+        while (!st.empty())
+            res.insert(0, st.pop());
         return res.toString();
     }
 }
