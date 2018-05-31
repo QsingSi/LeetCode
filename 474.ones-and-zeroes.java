@@ -48,21 +48,26 @@
  *
  */
 class Solution {
-    public int findMaxForm(String[] strs, int m, int n) {
-        Arrays.sort(strs, (a, b)->a.length() - b.length());
-        int cnt = 0;
-        for (String s : strs) {
-            int tmpM = 0, tmpN = 0;
-            for (char ch : s.toCharArray()) {
-                tmpM += ch == '0' ? 1 : 0;
-                tmpN += ch == '1' ? 1 : 0;
-            }
-            if (m >= tmpM && n >= tmpN) {
-                cnt++;
-                m -= tmpM;
-                n -= tmpN;
-            }
+    private int dfs(String[] strs, int start, int m, int n, int[][][] memo) {
+        if (start == strs.length || (m == 0 && n == 0)) {
+            return 0;
         }
-        return cnt;
+        if (memo[m][n][start] > 0)
+            return memo[m][n][start];
+        int tmpM = 0, tmpN = 0;
+        for (int i = 0; i < strs[start].length(); i++)
+            tmpM += strs[start].charAt(i) == '0' ? 1 : 0;
+        tmpN = strs[start].length() - tmpM;
+        int cntInclude = 0;
+        if (tmpM <= m && tmpN <= n)
+            cntInclude = 1 + dfs(strs, start + 1, m - tmpM, n - tmpN, memo);
+        int cntExclude = dfs(strs, start + 1, m, n, memo);
+        memo[m][n][start] = Math.max(cntInclude, cntExclude);
+        return memo[m][n][start];
+    }
+
+    public int findMaxForm(String[] strs, int m, int n) {
+        int[][][] memo = new int[m + 1][n + 1][strs.length];
+        return dfs(strs, 0, m, n, memo);
     }
 }
