@@ -33,38 +33,16 @@
  */
 class Solution {
     public int minDistance(String word1, String word2) {
-        int len1 = word1.length(), len2 = word2.length();
-        if (len1 == 0 || len2 == 0)
-            return Math.max(len1, len2);
-        int[] cnt1 = new int[26];
-        int[] cnt2 = new int[26];
-        for (char ch : word1.toCharArray())
-            cnt1[ch - 'a']++;
-        for (char ch : word2.toCharArray())
-            cnt2[ch - 'a']++;
-        int cnt = 0;
-        for (char ch : word1.toCharArray()) {
-            if (cnt2[ch - 'a'] == 0)
-                cnt += cnt1[ch - 'a'];
-            else if (cnt2[ch - 'a'] > cnt1[ch - 'a']) {
-                cnt += cnt2[ch - 'a'] - cnt1[ch - 'a'];
-                cnt2[ch - 'a'] = cnt1[ch - 'a'];
-            } else if (cnt2[ch - 'a'] < cnt1[ch - 'a']) {
-                cnt += cnt1[ch - 'a'] - cnt2[ch - 'a'];
-                cnt1[ch - 'a'] = cnt2[ch - 'a'];
+        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+        for (int i = 0; i <= word1.length(); i++) {
+            for (int j = 0; j <= word2.length(); j++) {
+                if (i == 0 || j == 0)
+                    dp[i][j] = 0;
+                else
+                    dp[i][j] = (word1.charAt(i - 1) == word2.charAt(j - 1)) ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
             }
         }
-        for (char ch : word2.toCharArray()) {
-            if (cnt1[ch - 'a'] == 0)
-                cnt += cnt2[ch - 'a'];
-            else if (cnt2[ch - 'a'] > cnt1[ch - 'a']) {
-                cnt += cnt2[ch - 'a'] - cnt1[ch - 'a'];
-                cnt2[ch - 'a'] = cnt1[ch - 'a'];
-            } else if (cnt2[ch - 'a'] < cnt1[ch - 'a']) {
-                cnt += cnt1[ch - 'a'] - cnt2[ch - 'a'];
-                cnt1[ch - 'a'] = cnt2[ch - 'a'];
-            }
-        }
-        return cnt;
+        int num = dp[word1.length()][word2.length()];
+        return word1.length() + word2.length() - 2 * num;
     }
 }
