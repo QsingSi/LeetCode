@@ -57,32 +57,24 @@ class Solution {
             if (arr[i] < arr[i + 1]) {
                 bigger[i] = i + 1;
                 end[i] = i + 1;
-                for (int k = i + 2; k < arr.length && k <= bigger[bigger[i]]; k++)
-                    if (arr[i] > arr[k])
-                        end[i] = k + 1;
             } else {
                 int j = i + 2;
-                for (; j < arr.length; j++) {
+                for (; j < arr.length; j++)
                     if (arr[j] > arr[i])
                         break;
-                }
-                if (j == arr.length) {
-                    bigger[i] = j;
-                    end[i] = j;
-                } else if (bigger[j] == j + 1) {
-                    bigger[i] = j;
-                    end[i] = j;
-                } else {
-                    for (int k = j + 1; k <= bigger[j] && k < arr.length; k++)
-                        if (arr[i] > arr[k])
-                            end[i] = k + 1;
-                }
+                bigger[i] = j;
             }
+            for (int j = i + 1; j < arr.length; j++)
+                if (arr[i] > arr[j])
+                    end[i] = j + 1;
         }
         int cnt = 0, right = 0;
         for (int i = 0; i < arr.length;) {
             cnt++;
             for (int j = i; j < end[i]; j++)
+                right = Math.max(right, end[j]);
+            int tmp = right;
+            for (int j = i; j < tmp; j++)
                 right = Math.max(right, end[j]);
             i = right;
         }
