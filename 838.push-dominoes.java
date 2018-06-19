@@ -1,0 +1,89 @@
+/*
+ * [868] Push Dominoes
+ *
+ * https://leetcode.com/problems/push-dominoes/description/
+ *
+ * algorithms
+ * Medium (39.57%)
+ * Total Accepted:    3.5K
+ * Total Submissions: 8.8K
+ * Testcase Example:  '".L.R...LR..L.."'
+ *
+ * There are N dominoes in a line, and we place each domino vertically
+ * upright.
+ *
+ * In the beginning, we simultaneously push some of the dominoes either to the
+ * left or to the right.
+ *
+ *
+ *
+ * After each second, each domino that is falling to the left pushes the
+ * adjacent domino on the left.
+ *
+ * Similarly, the dominoes falling to the right push their adjacent dominoes
+ * standing on the right.
+ *
+ * When a vertical domino has dominoes falling on it from both sides, it stays
+ * still due to the balance of the forces.
+ *
+ * For the purposes of this question, we will consider that a falling domino
+ * expends no additional force to a falling or already fallen domino.
+ *
+ * Given a string "S" representing the initial state. S[i] = 'L', if the i-th
+ * domino has been pushed to the left; S[i] = 'R', if the i-th domino has been
+ * pushed to the right; S[i] = '.', if the i-th domino has not been pushed.
+ *
+ * Return a string representing the final state. 
+ *
+ * Example 1:
+ *
+ *
+ * Input: ".L.R...LR..L.."
+ * Output: "LL.RR.LLRRLL.."
+ *
+ *
+ * Example 2:
+ *
+ *
+ * Input: "RR.L"
+ * Output: "RR.L"
+ * Explanation: The first domino expends no additional force on the second
+ * domino.
+ *
+ *
+ * Note:
+ *
+ *
+ * 0 <= N <= 10^5
+ * String dominoes contains only 'L', 'R' and '.'
+ *
+ */
+class Solution {
+    public String pushDominoes(String dominoes) {
+        StringBuilder sb = new StringBuilder();
+        String d = 'L' + dominoes + 'R';
+        for (int i = 0, j = 1; j < d.length(); j++) {
+            if (d.charAt(j) == '.')
+                continue;
+            int len = j - i - 1;
+            if (i > 0)
+                sb.append(d.charAt(i));
+            if (d.charAt(i) == d.charAt(j))
+                for (int k = 0; k < len; k++)
+                    sb.append(d.charAt(i));
+            else if (d.charAt(i) == 'L' && d.charAt(j) == 'R')
+                for (int k = 0; k < len; k++)
+                    sb.append('.');
+            else {
+                for (int k = 0; k < len / 2; k++)
+                    sb.append('R');
+                if ((len & 1) == 1)
+                    sb.append('.');
+                for (int k = 0; k < len / 2; k++)
+                    sb.append('L');
+            }
+            i = j;
+        }
+        return sb.toString();
+    }
+}
