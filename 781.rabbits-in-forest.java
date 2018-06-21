@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.Set;
 
 /*
@@ -47,12 +48,14 @@ import java.util.Set;
  */
 class Solution {
     public int numRabbits(int[] answers) {
-        Set<Integer> set = new HashSet<>();
+        int res = 0;
+        Map<Integer, Integer> mask = new HashMap<>();
         for (int ans : answers)
-            set.add(ans);
-        int sum = 0;
-        for (int num : set)
-            sum += num;
-        return ++sum;
+            mask.put(ans, mask.getOrDefault(ans, 0) + 1);
+        for (int n : mask.keySet()) {
+            int group = mask.get(n) / (n + 1);
+            res += mask.get(n) % (n + 1) != 0 ? (group + 1) * (n + 1) : group * (n + 1);
+        }
+        return res;
     }
 }
