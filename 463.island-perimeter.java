@@ -4,9 +4,9 @@
  * https://leetcode.com/problems/island-perimeter/description/
  *
  * algorithms
- * Easy (58.09%)
- * Total Accepted:    81.6K
- * Total Submissions: 140.4K
+ * Easy (58.13%)
+ * Total Accepted:    86K
+ * Total Submissions: 147.6K
  * Testcase Example:  '[[0,1,0,0],[1,1,1,0],[0,1,0,0],[1,1,0,0]]'
  *
  * You are given a map in form of a two-dimensional integer grid where 1
@@ -33,6 +33,22 @@
  */
 class Solution {
     public int islandPerimeter(int[][] grid) {
-
+        if (grid == null || grid.length == 0 || grid[0].length == 0)
+            return 0;
+        int m = grid.length;
+        int n = grid[0].length;
+        int area = 0, conn = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    area++;
+                    if (i > 0 && grid[i - 1][j] == 1) conn++;
+                    if (j > 0 && grid[i][j - 1] == 1) conn++;
+                    if (i < m - 1 && grid[i + 1][j] == 1) conn++;
+                    if (j < n - 1 && grid[i][j + 1] == 1) conn++;
+                }
+            }
+        }
+        return area * 4 - conn;
     }
 }
