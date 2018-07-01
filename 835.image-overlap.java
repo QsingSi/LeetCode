@@ -50,9 +50,9 @@ class Solution {
         Map<Integer, Integer> mask = new HashMap<>();
         for (int i = 0; i < N * N; i++) {
             if (A[i / N][i % N] == 1)
-                LA.add(i / N << 5 + i % N);
+                LA.add(i / N * 64 + i % N);
             if (B[i / N][i % N] == 1)
-                LB.add(i / N << 5 + i % N);
+                LB.add(i / N * 64 + i % N);
         }
         for (int a : LA) {
             for (int b : LB)
