@@ -1,46 +1,32 @@
-class Solution {
-    //超时为什么
-    public int dfs(List<List<Integer>> edges, boolean[] visit, int now) {
-        int depth = -1, len = edges.get(now).size();
-        visit[now] = true;
-        boolean flag = true;
-        for (int i = 0; i < len; i++) {
-            if (visit[edges.get(now).get(i)] == false) {
-                flag = false;
-                break;
-            }
-        }
-        if (flag)
-            return 1;
-        for (int i = 0; i < len; i++) {
-            if (!visit[edges.get(now).get(i)]) {
-                depth = Math.max(1 + dfs(edges, visit, edges.get(now).get(i)), depth);
-            }
-        }
-        return depth;
-    }
+import java.util.ArrayList;
+import java.util.Queue;
 
+
+class Solution {
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        if (n == 1) {
+            Integer[] res = {0};
+            return Arrays.asList(res);
+        }
         List<List<Integer>> adj = new ArrayList<>();
         for (int i = 0; i < n; i++)
             adj.add(new ArrayList());
-        for (int i = 0; i < edges.length; i++) {
-            adj.get(edges[i][0]).add(edges[i][1]);
-            adj.get(edges[i][1]).add(edges[i][0]);
+        for (int[] edge : edges) {
+            adj.get(edge[0]).add(edge[1]);
+            adj.get(edge[1]).add(edge[0]);
         }
         List<Integer> res = new ArrayList<>();
-        boolean[] visit = new boolean[n];
-        int min = dfs(adj, visit, 0);
-        res.add(0);
-        for (int i = 1; i < n; i++) {
-            Arrays.fill(visit, false);
-            int now = dfs(adj, visit, i);
-            if (now <= min) {
-                if (now < min)
-                    res.clear();
+        for (int i = 0; i < n; i++)
+            if (adj.get(i).size() == 1)
                 res.add(i);
+        while (n > 2) {
+            for (int sz = res.size(); sz > 0; sz--, n--) {
+                int cur = res.remove(0);
+                int next = adj.get(cur).get(0);
+                adj.get(next).remove(Integer.valueOf(cur));
+                if (adj.get(next).size() == 1)
+                    res.add(next);
             }
-            min = now < min ? now : min;
         }
         return res;
     }
