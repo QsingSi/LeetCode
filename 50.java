@@ -1,6 +1,5 @@
 class Solution {
     public double power(double x, long n) {
-        System.out.println(n);
         if (Math.abs(x) >= 2 && n >= 1024) {
             if (x < 0 && n % 2 != 0)
                 return -Double.MAX_VALUE;
@@ -18,7 +17,7 @@ class Solution {
 
     public double myPow(double x, int n) {
         //大于double最大值，返回double最大值即可
-        if (x == 0 || x == 1)
+        if (x == 0.0 || x == 1.0)
             return x;
         if (n > 0)
             return power(x, n);
