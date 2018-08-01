@@ -65,7 +65,7 @@ class MyLinkedList {
 
     /** Get the value of the index-th node in the linked list. If the index is invalid, return -1. */
     public int get(int index) {
-        if(index >=0 && index < list.size())
+        if (index >= 0 && index < list.size())
             return list.get(index);
         else return -1;
     }
@@ -82,9 +82,10 @@ class MyLinkedList {
 
     /** Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted. */
     public void addAtIndex(int index, int val) {
-        if (index == list.size())
+        int size = list.size();
+        if (index == size)
             list.add(val);
-        if (index >= 0 && index < list.size())
+        if (index >= 0 && index < size)
             list.add(index, val);
     }
 
